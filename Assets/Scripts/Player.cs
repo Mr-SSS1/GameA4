@@ -4,7 +4,6 @@ public class Player : MonoBehaviour
 {
 
     [Header("基本ステータス")]
-    [SerializeField] int currentHp;   //現在のHP
     [SerializeField] float speed; //移動速度
     public int jumpCount;
     public int maxJumpCount;
@@ -32,10 +31,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        currentHp = 1;
         Alive = true;
         isGrounded = false;
         state = State.None;
+        ResPos = transform.position;
     }
     // Update is called once per frame
     void Update()
@@ -117,22 +116,15 @@ public class Player : MonoBehaviour
         jumpCount = maxJumpCount;
     }
 
-    public void TakeDamage(int damageAmount)　//ダメージ判定
+    public void TakeDamage()　//ダメージ判定
     {
-        currentHp -= damageAmount;
-
-        if (currentHp <= 0 && Alive)　//現在のHPが０以下になった時
-        {
-            currentHp = 0;
-            Alive = false;
-        }
-        else if (!Alive)
-        {
-            currentHp = 0;
-        }
+       Alive = false;
+       state = State.Dead;
     }
 
     [SerializeField] float deadP = 25;
+
+    public Vector2 ResPos;
 
     void LifeCheck()
     {
@@ -142,18 +134,14 @@ public class Player : MonoBehaviour
         {
             if (Alive)
             {
-                currentHp = 0;
-                Alive = false;
-                state = State.Dead;
+                TakeDamage();
             }
         }
 
-
-        if (currentHp <= 0 && Alive)
+        if(state == State.Dead)
         {
-            currentHp = 0;
-            Alive = false;
-            state = State.Dead;
+            transform.position = ResPos;
+            Alive = true;
         }
     }
 }
