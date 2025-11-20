@@ -140,8 +140,8 @@ public class Player : MonoBehaviour
 
         if(state == State.Dead)
         {
-            transform.position = ResPos;
             Alive = true;
+            transform.position = ResPos;
         }
     }
 }

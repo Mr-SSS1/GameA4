@@ -10,21 +10,21 @@ public class GroundChecker : MonoBehaviour
         player = FindObjectOfType<Player>();
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Ground")
+        if (collision.tag == "Ground" && !player.isGrounded)
         {
             Debug.Log("地面と接触した！");
             player.HitGround();
         }
-        else if(collision.tag == "CheckPoint") 
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "CheckPoint")
         {
             Debug.Log("確認地点と接触した！");
             player.ResPos = new Vector2(collision.transform.position.x, collision.transform.position.y + 2);
         }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        
     }
 }

@@ -1,36 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Obj : MonoBehaviour
 {
     Vector2 defPos;
-    public bool set;
-    [SerializeField]Player player;
+    bool set;
+    [SerializeField] Player player;
+
     void Start()
     {
         set = true;
         defPos = transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector2 pos = transform.position;
-        Vector2 Ppos = player.transform.position;
-        Vector2 Vpos = defPos - pos;
-        
-        if (Ppos.x - pos.x > 15f && !set) 
+        float distX = Mathf.Abs(player.transform.position.x - transform.position.x);
+
+        // プレイヤーが近くに来たらセット解除（リセット準備）
+        if (distX < 5f)
+        {
+            set = false;
+        }
+
+        // 離れたらリセット
+        if (distX > 15f && !set)
         {
             ResetPos();
             set = true;
         }
-        else if (Ppos.x - pos.x < 5f)
-        { 
-            set = false;
-        }
 
-        if (Vpos.x > 10f)
+        // 初期位置からのズレで強制リセットする場合
+        float diffFromDefault = Mathf.Abs(defPos.x - transform.position.x);
+        if (diffFromDefault > 10f)
         {
             ResetPos();
         }
