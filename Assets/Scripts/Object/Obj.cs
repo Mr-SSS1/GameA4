@@ -23,7 +23,7 @@ public class Obj : MonoBehaviour
         }
 
         // 離れたらリセット
-        if (distX > 15f && !set)
+        if (distX > 10f && !set)
         {
             ResetPos();
             set = true;
@@ -31,7 +31,7 @@ public class Obj : MonoBehaviour
 
         // 初期位置からのズレで強制リセットする場合
         float diffFromDefault = Mathf.Abs(defPos.x - transform.position.x);
-        if (diffFromDefault > 10f)
+        if (diffFromDefault > 30f)
         {
             ResetPos();
         }

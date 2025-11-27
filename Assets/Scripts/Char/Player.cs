@@ -5,10 +5,13 @@ public class Player : MonoBehaviour
 
     [Header("基本ステータス")]
     [SerializeField] float speed; //移動速度
-    public int jumpCount;
-    public int maxJumpCount;
-    public float jumpForce; //ジャンプの高さ
-    
+    [SerializeField] int jumpCount;
+    [SerializeField] int maxJumpCount;
+    [SerializeField] float jumpForce; //ジャンプの高さ
+
+    [Header("特殊ステータス")]
+    [SerializeField] int death; //死亡回数
+
 
     [Header("状態")]
     public bool Alive; //生きてるかどうか
@@ -25,6 +28,8 @@ public class Player : MonoBehaviour
     public State state;
 
     private Rigidbody2D rb;
+    [SerializeField] Signal sig;
+    [SerializeField] GameManeger gm;
 
 
     // Start is called before the first frame update
@@ -44,14 +49,15 @@ public class Player : MonoBehaviour
         {
             if (Alive)  // 生きているときだけ移動とジャンプを処理
             {
+                speed = 5f;
                 PlayerMove();
                 Jump();
             }
-            else
-            {
-                speed = 0f;
-                rb.velocity = new Vector2(0, 0);  // 移動を停止
-            }
+        }
+        else
+        {
+            speed = 0f;
+            rb.velocity = new Vector2(speed, rb.velocity.y);  // 移動を停止
         }
     }
 
@@ -118,8 +124,12 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()　//ダメージ判定
     {
-       Alive = false;
-       state = State.Dead;
+        sig.ResetSignal();
+        Alive = false;
+        transform.position = ResPos;
+        death++;
+        gm.DeathCount(death);
+       
     }
 
     [SerializeField] float deadP = 25;
@@ -130,18 +140,13 @@ public class Player : MonoBehaviour
     {
         Vector2 pos = transform.position;
 
-        if (pos.y < -deadP)
+        if (pos.y < -deadP || state == State.Dead || sig.colors == Signal.Colors.Red && state == State.Moved)
         {
             if (Alive)
             {
                 TakeDamage();
+                Alive = true;
             }
-        }
-
-        if(state == State.Dead)
-        {
-            Alive = true;
-            transform.position = ResPos;
         }
     }
 }
