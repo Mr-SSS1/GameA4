@@ -4,6 +4,7 @@ using UnityEngine;
 public class GroundChecker : MonoBehaviour
 {
     Player player;
+    public GameManeger gm;
 
     private void Start()
     {
@@ -25,6 +26,14 @@ public class GroundChecker : MonoBehaviour
         {
             Debug.Log("確認地点と接触した！");
             player.ResPos = new Vector2(collision.transform.position.x, collision.transform.position.y + 2);
+        }
+        else if(collision.tag == "GoalPoint")
+        {
+            if (!gm.Goal)
+            {
+                Debug.Log("ゴール地点と接触した！");
+                gm.Goal = true;
+            } 
         }
     }
 }

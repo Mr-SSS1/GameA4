@@ -124,12 +124,14 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()　//ダメージ判定
     {
-        sig.ResetSignal();
-        Alive = false;
-        transform.position = ResPos;
-        death++;
-        gm.DeathCount(death);
-       
+        if(!gm.Goal)
+        {
+            sig.ResetSignal();
+            Alive = false;
+            transform.position = ResPos;
+            death++;
+            gm.DeathCount(death);
+        }
     }
 
     [SerializeField] float deadP = 25;

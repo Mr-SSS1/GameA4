@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - CheckPoint
   - WP
+  - GoalPoint
   layers:
   - Default
   - TransparentFX
